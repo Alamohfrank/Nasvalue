@@ -1,0 +1,674 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<title>
+		Nas Missing Values & Visualisation
+	</title>	
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+<div>
+
+</div>
+
+<div class="section level1">
+<h1>ACTIVITY: Joins Pivots dataRetrieval</h1>
+<div class="section level2">
+<h2>Load the tidyverse, dataRetrieval, and patchwork packages.</h2>
+<pre class="r"><code>library(tidyverse)</code></pre>
+<pre><code>## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+## ✔ dplyr     1.1.4     ✔ readr     2.1.5
+## ✔ forcats   1.0.0     ✔ stringr   1.5.1
+## ✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+## ✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+## ✔ purrr     1.0.2     
+## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+## ✖ dplyr::filter() masks stats::filter()
+## ✖ dplyr::lag()    masks stats::lag()
+## ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+<pre class="r"><code>library(dataRetrieval)
+library(patchwork)</code></pre>
+</div>
+<div class="section level2">
+<h2>Problem 1</h2>
+<p>Using readWQPqw(), read all the chloride (00940) data for the New
+River at Radford (03171000, must add USGS- to gage id). Use the head()
+function to print the beginning of the output from readNWISqw.</p>
+<pre class="r"><code>#set the site number and parameter code
+site_number&lt;-&quot;USGS-03171000&quot;
+parameter_code &lt;- &quot;00940&quot;
+
+#Read the chloride data using the readNWISqw
+newriverwQ &lt;- readWQPqw(site_number, parameter_code)
+head(newriverwQ)</code></pre>
+<pre><code>##   OrganizationIdentifier             OrganizationFormalName ActivityIdentifier
+## 1                USGS-VA USGS Virginia Water Science Center nwisva.01.00701400
+## 2                USGS-VA USGS Virginia Water Science Center nwisva.01.00701309
+## 3                USGS-VA USGS Virginia Water Science Center nwisva.01.00701307
+## 4                USGS-VA USGS Virginia Water Science Center nwisva.01.00800181
+## 5                USGS-VA USGS Virginia Water Science Center nwisva.01.00801505
+## 6                USGS-VA USGS Virginia Water Science Center nwisva.01.00701308
+##   ActivityTypeCode ActivityMediaName ActivityMediaSubdivisionName
+## 1   Sample-Routine             Water                Surface Water
+## 2   Sample-Routine             Water                Surface Water
+## 3   Sample-Routine             Water                Surface Water
+## 4   Sample-Routine             Water                Surface Water
+## 5   Sample-Routine             Water                Surface Water
+## 6   Sample-Routine             Water                Surface Water
+##   ActivityStartDate ActivityStartTime.Time ActivityStartTime.TimeZoneCode
+## 1        2007-08-20               13:20:00                            EDT
+## 2        2007-07-09               11:30:00                            EDT
+## 3        2007-04-02               11:00:00                            EDT
+## 4        2007-10-01               09:55:00                            EDT
+## 5        2008-05-16               12:30:00                            EDT
+## 6        2007-05-22               10:00:00                            EDT
+##   ActivityEndDate ActivityEndTime.Time ActivityEndTime.TimeZoneCode
+## 1            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+## 2            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+## 3            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+## 4            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+## 5            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+## 6            &lt;NA&gt;                 &lt;NA&gt;                         &lt;NA&gt;
+##   ActivityDepthHeightMeasure.MeasureValue
+## 1                                      NA
+## 2                                      NA
+## 3                                      NA
+## 4                                      NA
+## 5                                      NA
+## 6                                      NA
+##   ActivityDepthHeightMeasure.MeasureUnitCode
+## 1                                       &lt;NA&gt;
+## 2                                       &lt;NA&gt;
+## 3                                       &lt;NA&gt;
+## 4                                       &lt;NA&gt;
+## 5                                       &lt;NA&gt;
+## 6                                       &lt;NA&gt;
+##   ActivityDepthAltitudeReferencePointText
+## 1                                    &lt;NA&gt;
+## 2                                    &lt;NA&gt;
+## 3                                    &lt;NA&gt;
+## 4                                    &lt;NA&gt;
+## 5                                    &lt;NA&gt;
+## 6                                    &lt;NA&gt;
+##   ActivityTopDepthHeightMeasure.MeasureValue
+## 1                                         NA
+## 2                                         NA
+## 3                                         NA
+## 4                                         NA
+## 5                                         NA
+## 6                                         NA
+##   ActivityTopDepthHeightMeasure.MeasureUnitCode
+## 1                                          &lt;NA&gt;
+## 2                                          &lt;NA&gt;
+## 3                                          &lt;NA&gt;
+## 4                                          &lt;NA&gt;
+## 5                                          &lt;NA&gt;
+## 6                                          &lt;NA&gt;
+##   ActivityBottomDepthHeightMeasure.MeasureValue
+## 1                                            NA
+## 2                                            NA
+## 3                                            NA
+## 4                                            NA
+## 5                                            NA
+## 6                                            NA
+##   ActivityBottomDepthHeightMeasure.MeasureUnitCode ProjectIdentifier
+## 1                                             &lt;NA&gt;              &lt;NA&gt;
+## 2                                             &lt;NA&gt;              &lt;NA&gt;
+## 3                                             &lt;NA&gt;              &lt;NA&gt;
+## 4                                             &lt;NA&gt;              &lt;NA&gt;
+## 5                                             &lt;NA&gt;              &lt;NA&gt;
+## 6                                             &lt;NA&gt;              &lt;NA&gt;
+##   ActivityConductingOrganizationText MonitoringLocationIdentifier
+## 1                               &lt;NA&gt;                USGS-03171000
+## 2                               &lt;NA&gt;                USGS-03171000
+## 3                               &lt;NA&gt;                USGS-03171000
+## 4                               &lt;NA&gt;                USGS-03171000
+## 5                               &lt;NA&gt;                USGS-03171000
+## 6                               &lt;NA&gt;                USGS-03171000
+##   ActivityCommentText SampleAquifer  HydrologicCondition HydrologicEvent
+## 1                &lt;NA&gt;          &lt;NA&gt; Stable, normal stage  Routine sample
+## 2                &lt;NA&gt;          &lt;NA&gt; Stable, normal stage  Routine sample
+## 3                &lt;NA&gt;          &lt;NA&gt; Stable, normal stage  Routine sample
+## 4                &lt;NA&gt;          &lt;NA&gt; Stable, normal stage  Routine sample
+## 5                &lt;NA&gt;          &lt;NA&gt; Stable, normal stage  Routine sample
+## 6                &lt;NA&gt;          &lt;NA&gt; Stable, normal stage  Routine sample
+##   SampleCollectionMethod.MethodIdentifier
+## 1                                    USGS
+## 2                                    USGS
+## 3                                    USGS
+## 4                                    USGS
+## 5                                    USGS
+## 6                                    USGS
+##   SampleCollectionMethod.MethodIdentifierContext
+## 1                                           USGS
+## 2                                           USGS
+## 3                                           USGS
+## 4                                           USGS
+## 5                                           USGS
+## 6                                           USGS
+##   SampleCollectionMethod.MethodName SampleCollectionEquipmentName
+## 1                              USGS                       Unknown
+## 2                              USGS                       Unknown
+## 3                              USGS                       Unknown
+## 4                              USGS                       Unknown
+## 5                              USGS                       Unknown
+## 6                              USGS                       Unknown
+##   ResultDetectionConditionText CharacteristicName ResultSampleFractionText
+## 1                         &lt;NA&gt;           Chloride                Dissolved
+## 2                         &lt;NA&gt;           Chloride                Dissolved
+## 3                         &lt;NA&gt;           Chloride                Dissolved
+## 4                         &lt;NA&gt;           Chloride                Dissolved
+## 5                         &lt;NA&gt;           Chloride                Dissolved
+## 6                         &lt;NA&gt;           Chloride                Dissolved
+##   ResultMeasureValue ResultMeasure.MeasureUnitCode MeasureQualifierCode
+## 1                6.5                          mg/l                 &lt;NA&gt;
+## 2                6.7                          mg/l                 &lt;NA&gt;
+## 3                7.1                          mg/l                 &lt;NA&gt;
+## 4                6.6                          mg/l                 &lt;NA&gt;
+## 5                7.4                          mg/l                 &lt;NA&gt;
+## 6                6.8                          mg/l                 &lt;NA&gt;
+##   ResultStatusIdentifier StatisticalBaseCode ResultValueTypeName
+## 1               Accepted                &lt;NA&gt;              Actual
+## 2               Accepted                &lt;NA&gt;              Actual
+## 3               Accepted                &lt;NA&gt;              Actual
+## 4               Accepted                &lt;NA&gt;              Actual
+## 5               Accepted                &lt;NA&gt;              Actual
+## 6               Accepted                &lt;NA&gt;              Actual
+##   ResultWeightBasisText ResultTimeBasisText ResultTemperatureBasisText
+## 1                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 2                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 3                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 4                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 5                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 6                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+##   ResultParticleSizeBasisText PrecisionValue ResultCommentText USGSPCode
+## 1                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;     00940
+## 2                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;     00940
+## 3                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;     00940
+## 4                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;     00940
+## 5                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;     00940
+## 6                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;     00940
+##   ResultDepthHeightMeasure.MeasureValue
+## 1                                    NA
+## 2                                    NA
+## 3                                    NA
+## 4                                    NA
+## 5                                    NA
+## 6                                    NA
+##   ResultDepthHeightMeasure.MeasureUnitCode
+## 1                                     &lt;NA&gt;
+## 2                                     &lt;NA&gt;
+## 3                                     &lt;NA&gt;
+## 4                                     &lt;NA&gt;
+## 5                                     &lt;NA&gt;
+## 6                                     &lt;NA&gt;
+##   ResultDepthAltitudeReferencePointText SubjectTaxonomicName
+## 1                                  &lt;NA&gt;                 &lt;NA&gt;
+## 2                                  &lt;NA&gt;                 &lt;NA&gt;
+## 3                                  &lt;NA&gt;                 &lt;NA&gt;
+## 4                                  &lt;NA&gt;                 &lt;NA&gt;
+## 5                                  &lt;NA&gt;                 &lt;NA&gt;
+## 6                                  &lt;NA&gt;                 &lt;NA&gt;
+##   SampleTissueAnatomyName ResultAnalyticalMethod.MethodIdentifier
+## 1                    &lt;NA&gt;                                    &lt;NA&gt;
+## 2                    &lt;NA&gt;                                    &lt;NA&gt;
+## 3                    &lt;NA&gt;                                    &lt;NA&gt;
+## 4                    &lt;NA&gt;                                    &lt;NA&gt;
+## 5                    &lt;NA&gt;                                    &lt;NA&gt;
+## 6                    &lt;NA&gt;                                    &lt;NA&gt;
+##   ResultAnalyticalMethod.MethodIdentifierContext
+## 1                                           &lt;NA&gt;
+## 2                                           &lt;NA&gt;
+## 3                                           &lt;NA&gt;
+## 4                                           &lt;NA&gt;
+## 5                                           &lt;NA&gt;
+## 6                                           &lt;NA&gt;
+##   ResultAnalyticalMethod.MethodName MethodDescriptionText LaboratoryName
+## 1                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 2                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 3                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 4                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 5                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 6                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+##   AnalysisStartDate ResultLaboratoryCommentText
+## 1              &lt;NA&gt;                        &lt;NA&gt;
+## 2              &lt;NA&gt;                        &lt;NA&gt;
+## 3              &lt;NA&gt;                        &lt;NA&gt;
+## 4              &lt;NA&gt;                        &lt;NA&gt;
+## 5              &lt;NA&gt;                        &lt;NA&gt;
+## 6              &lt;NA&gt;                        &lt;NA&gt;
+##   DetectionQuantitationLimitTypeName
+## 1                               &lt;NA&gt;
+## 2                               &lt;NA&gt;
+## 3                               &lt;NA&gt;
+## 4                               &lt;NA&gt;
+## 5                               &lt;NA&gt;
+## 6                               &lt;NA&gt;
+##   DetectionQuantitationLimitMeasure.MeasureValue
+## 1                                             NA
+## 2                                             NA
+## 3                                             NA
+## 4                                             NA
+## 5                                             NA
+## 6                                             NA
+##   DetectionQuantitationLimitMeasure.MeasureUnitCode PreparationStartDate
+## 1                                              &lt;NA&gt;                 &lt;NA&gt;
+## 2                                              &lt;NA&gt;                 &lt;NA&gt;
+## 3                                              &lt;NA&gt;                 &lt;NA&gt;
+## 4                                              &lt;NA&gt;                 &lt;NA&gt;
+## 5                                              &lt;NA&gt;                 &lt;NA&gt;
+## 6                                              &lt;NA&gt;                 &lt;NA&gt;
+##   ProviderName timeZoneStart timeZoneEnd ActivityStartDateTime
+## 1         NWIS             4          NA   2007-08-20 17:20:00
+## 2         NWIS             4          NA   2007-07-09 15:30:00
+## 3         NWIS             4          NA   2007-04-02 15:00:00
+## 4         NWIS             4          NA   2007-10-01 13:55:00
+## 5         NWIS             4          NA   2008-05-16 16:30:00
+## 6         NWIS             4          NA   2007-05-22 14:00:00
+##   ActivityEndDateTime
+## 1                &lt;NA&gt;
+## 2                &lt;NA&gt;
+## 3                &lt;NA&gt;
+## 4                &lt;NA&gt;
+## 5                &lt;NA&gt;
+## 6                &lt;NA&gt;</code></pre>
+<pre class="r"><code>view(newriverwQ)</code></pre>
+</div>
+<div class="section level2">
+<h2>Problem 2_</h2>
+<p>Using the readNWISdv (daily values) function, download discharge
+(00060), temperature (00003), and specific conductivity (00095) for the
+New River at Radford from 2007 to 2009 (regular year). Use
+renameNWIScolumns() to rename the output of the download. Use head() to
+show the beginning of the results of your download.</p>
+<pre class="r"><code>site&lt;-&quot;03171000&quot;
+parameter_codes &lt;- c(&quot;00060&quot;, &quot;00003&quot;, &quot;00095&quot;)
+start_date &lt;- &quot;2007-01-01&quot;
+end_date &lt;- &quot;2009-12-31&quot;
+newphys &lt;- readNWISdv(site, parameter_codes, start_date,end_date)|&gt;
+     renameNWISColumns()
+head(newphys)</code></pre>
+<pre><code>##   agency_cd  site_no       Date  Flow Flow_cd SpecCond SpecCond_cd
+## 1      USGS 03171000 2007-01-01  8810       A      122           A
+## 2      USGS 03171000 2007-01-02 13100       A      116           A
+## 3      USGS 03171000 2007-01-03 10700       A       NA        &lt;NA&gt;
+## 4      USGS 03171000 2007-01-04  8960       A       NA        &lt;NA&gt;
+## 5      USGS 03171000 2007-01-05  5210       A       NA        &lt;NA&gt;
+## 6      USGS 03171000 2007-01-06  4640       A       NA        &lt;NA&gt;</code></pre>
+</div>
+<div class="section level2">
+<h2>Problem 3</h2>
+<p>Do a left join on newphys and newriver to add the chloride data to
+the daily discharge, temp, and conductivity data. hint: you will join on
+the date. Preview your data below the chunk using head().</p>
+<pre class="r"><code># Perform left join
+newphys_joining &lt;- left_join(newphys, newriverwQ, by = c(&quot;Date&quot; = &quot;ActivityStartDate&quot;))
+
+# Display the first few rows
+head(newphys_joining)</code></pre>
+<pre><code>##   agency_cd  site_no       Date  Flow Flow_cd SpecCond SpecCond_cd
+## 1      USGS 03171000 2007-01-01  8810       A      122           A
+## 2      USGS 03171000 2007-01-02 13100       A      116           A
+## 3      USGS 03171000 2007-01-03 10700       A       NA        &lt;NA&gt;
+## 4      USGS 03171000 2007-01-04  8960       A       NA        &lt;NA&gt;
+## 5      USGS 03171000 2007-01-05  5210       A       NA        &lt;NA&gt;
+## 6      USGS 03171000 2007-01-06  4640       A       NA        &lt;NA&gt;
+##   OrganizationIdentifier             OrganizationFormalName ActivityIdentifier
+## 1                   &lt;NA&gt;                               &lt;NA&gt;               &lt;NA&gt;
+## 2                   &lt;NA&gt;                               &lt;NA&gt;               &lt;NA&gt;
+## 3                USGS-VA USGS Virginia Water Science Center nwisva.01.00700592
+## 4                   &lt;NA&gt;                               &lt;NA&gt;               &lt;NA&gt;
+## 5                   &lt;NA&gt;                               &lt;NA&gt;               &lt;NA&gt;
+## 6                   &lt;NA&gt;                               &lt;NA&gt;               &lt;NA&gt;
+##                         ActivityTypeCode ActivityMediaName
+## 1                                   &lt;NA&gt;              &lt;NA&gt;
+## 2                                   &lt;NA&gt;              &lt;NA&gt;
+## 3 Quality Control Sample-Field Replicate             Water
+## 4                                   &lt;NA&gt;              &lt;NA&gt;
+## 5                                   &lt;NA&gt;              &lt;NA&gt;
+## 6                                   &lt;NA&gt;              &lt;NA&gt;
+##   ActivityMediaSubdivisionName ActivityStartTime.Time
+## 1                         &lt;NA&gt;                   &lt;NA&gt;
+## 2                         &lt;NA&gt;                   &lt;NA&gt;
+## 3                Surface Water               11:40:00
+## 4                         &lt;NA&gt;                   &lt;NA&gt;
+## 5                         &lt;NA&gt;                   &lt;NA&gt;
+## 6                         &lt;NA&gt;                   &lt;NA&gt;
+##   ActivityStartTime.TimeZoneCode ActivityEndDate ActivityEndTime.Time
+## 1                           &lt;NA&gt;            &lt;NA&gt;                 &lt;NA&gt;
+## 2                           &lt;NA&gt;            &lt;NA&gt;                 &lt;NA&gt;
+## 3                            EST            &lt;NA&gt;                 &lt;NA&gt;
+## 4                           &lt;NA&gt;            &lt;NA&gt;                 &lt;NA&gt;
+## 5                           &lt;NA&gt;            &lt;NA&gt;                 &lt;NA&gt;
+## 6                           &lt;NA&gt;            &lt;NA&gt;                 &lt;NA&gt;
+##   ActivityEndTime.TimeZoneCode ActivityDepthHeightMeasure.MeasureValue
+## 1                         &lt;NA&gt;                                      NA
+## 2                         &lt;NA&gt;                                      NA
+## 3                         &lt;NA&gt;                                      NA
+## 4                         &lt;NA&gt;                                      NA
+## 5                         &lt;NA&gt;                                      NA
+## 6                         &lt;NA&gt;                                      NA
+##   ActivityDepthHeightMeasure.MeasureUnitCode
+## 1                                       &lt;NA&gt;
+## 2                                       &lt;NA&gt;
+## 3                                       &lt;NA&gt;
+## 4                                       &lt;NA&gt;
+## 5                                       &lt;NA&gt;
+## 6                                       &lt;NA&gt;
+##   ActivityDepthAltitudeReferencePointText
+## 1                                    &lt;NA&gt;
+## 2                                    &lt;NA&gt;
+## 3                                    &lt;NA&gt;
+## 4                                    &lt;NA&gt;
+## 5                                    &lt;NA&gt;
+## 6                                    &lt;NA&gt;
+##   ActivityTopDepthHeightMeasure.MeasureValue
+## 1                                         NA
+## 2                                         NA
+## 3                                         NA
+## 4                                         NA
+## 5                                         NA
+## 6                                         NA
+##   ActivityTopDepthHeightMeasure.MeasureUnitCode
+## 1                                          &lt;NA&gt;
+## 2                                          &lt;NA&gt;
+## 3                                          &lt;NA&gt;
+## 4                                          &lt;NA&gt;
+## 5                                          &lt;NA&gt;
+## 6                                          &lt;NA&gt;
+##   ActivityBottomDepthHeightMeasure.MeasureValue
+## 1                                            NA
+## 2                                            NA
+## 3                                            NA
+## 4                                            NA
+## 5                                            NA
+## 6                                            NA
+##   ActivityBottomDepthHeightMeasure.MeasureUnitCode ProjectIdentifier
+## 1                                             &lt;NA&gt;              &lt;NA&gt;
+## 2                                             &lt;NA&gt;              &lt;NA&gt;
+## 3                                             &lt;NA&gt;              &lt;NA&gt;
+## 4                                             &lt;NA&gt;              &lt;NA&gt;
+## 5                                             &lt;NA&gt;              &lt;NA&gt;
+## 6                                             &lt;NA&gt;              &lt;NA&gt;
+##   ActivityConductingOrganizationText MonitoringLocationIdentifier
+## 1                               &lt;NA&gt;                         &lt;NA&gt;
+## 2                               &lt;NA&gt;                         &lt;NA&gt;
+## 3                               &lt;NA&gt;                USGS-03171000
+## 4                               &lt;NA&gt;                         &lt;NA&gt;
+## 5                               &lt;NA&gt;                         &lt;NA&gt;
+## 6                               &lt;NA&gt;                         &lt;NA&gt;
+##   ActivityCommentText SampleAquifer  HydrologicCondition HydrologicEvent
+## 1                &lt;NA&gt;          &lt;NA&gt;                 &lt;NA&gt;            &lt;NA&gt;
+## 2                &lt;NA&gt;          &lt;NA&gt;                 &lt;NA&gt;            &lt;NA&gt;
+## 3                &lt;NA&gt;          &lt;NA&gt; Stable, normal stage  Routine sample
+## 4                &lt;NA&gt;          &lt;NA&gt;                 &lt;NA&gt;            &lt;NA&gt;
+## 5                &lt;NA&gt;          &lt;NA&gt;                 &lt;NA&gt;            &lt;NA&gt;
+## 6                &lt;NA&gt;          &lt;NA&gt;                 &lt;NA&gt;            &lt;NA&gt;
+##   SampleCollectionMethod.MethodIdentifier
+## 1                                    &lt;NA&gt;
+## 2                                    &lt;NA&gt;
+## 3                                    USGS
+## 4                                    &lt;NA&gt;
+## 5                                    &lt;NA&gt;
+## 6                                    &lt;NA&gt;
+##   SampleCollectionMethod.MethodIdentifierContext
+## 1                                           &lt;NA&gt;
+## 2                                           &lt;NA&gt;
+## 3                                           USGS
+## 4                                           &lt;NA&gt;
+## 5                                           &lt;NA&gt;
+## 6                                           &lt;NA&gt;
+##   SampleCollectionMethod.MethodName SampleCollectionEquipmentName
+## 1                              &lt;NA&gt;                          &lt;NA&gt;
+## 2                              &lt;NA&gt;                          &lt;NA&gt;
+## 3                              USGS                       Unknown
+## 4                              &lt;NA&gt;                          &lt;NA&gt;
+## 5                              &lt;NA&gt;                          &lt;NA&gt;
+## 6                              &lt;NA&gt;                          &lt;NA&gt;
+##   ResultDetectionConditionText CharacteristicName ResultSampleFractionText
+## 1                         &lt;NA&gt;               &lt;NA&gt;                     &lt;NA&gt;
+## 2                         &lt;NA&gt;               &lt;NA&gt;                     &lt;NA&gt;
+## 3                         &lt;NA&gt;           Chloride                Dissolved
+## 4                         &lt;NA&gt;               &lt;NA&gt;                     &lt;NA&gt;
+## 5                         &lt;NA&gt;               &lt;NA&gt;                     &lt;NA&gt;
+## 6                         &lt;NA&gt;               &lt;NA&gt;                     &lt;NA&gt;
+##   ResultMeasureValue ResultMeasure.MeasureUnitCode MeasureQualifierCode
+## 1                 NA                          &lt;NA&gt;                 &lt;NA&gt;
+## 2                 NA                          &lt;NA&gt;                 &lt;NA&gt;
+## 3                6.1                          mg/l                 &lt;NA&gt;
+## 4                 NA                          &lt;NA&gt;                 &lt;NA&gt;
+## 5                 NA                          &lt;NA&gt;                 &lt;NA&gt;
+## 6                 NA                          &lt;NA&gt;                 &lt;NA&gt;
+##   ResultStatusIdentifier StatisticalBaseCode ResultValueTypeName
+## 1                   &lt;NA&gt;                &lt;NA&gt;                &lt;NA&gt;
+## 2                   &lt;NA&gt;                &lt;NA&gt;                &lt;NA&gt;
+## 3               Accepted                &lt;NA&gt;              Actual
+## 4                   &lt;NA&gt;                &lt;NA&gt;                &lt;NA&gt;
+## 5                   &lt;NA&gt;                &lt;NA&gt;                &lt;NA&gt;
+## 6                   &lt;NA&gt;                &lt;NA&gt;                &lt;NA&gt;
+##   ResultWeightBasisText ResultTimeBasisText ResultTemperatureBasisText
+## 1                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 2                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 3                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 4                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 5                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+## 6                  &lt;NA&gt;                &lt;NA&gt;                       &lt;NA&gt;
+##   ResultParticleSizeBasisText PrecisionValue ResultCommentText USGSPCode
+## 1                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;      &lt;NA&gt;
+## 2                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;      &lt;NA&gt;
+## 3                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;     00940
+## 4                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;      &lt;NA&gt;
+## 5                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;      &lt;NA&gt;
+## 6                        &lt;NA&gt;           &lt;NA&gt;              &lt;NA&gt;      &lt;NA&gt;
+##   ResultDepthHeightMeasure.MeasureValue
+## 1                                    NA
+## 2                                    NA
+## 3                                    NA
+## 4                                    NA
+## 5                                    NA
+## 6                                    NA
+##   ResultDepthHeightMeasure.MeasureUnitCode
+## 1                                     &lt;NA&gt;
+## 2                                     &lt;NA&gt;
+## 3                                     &lt;NA&gt;
+## 4                                     &lt;NA&gt;
+## 5                                     &lt;NA&gt;
+## 6                                     &lt;NA&gt;
+##   ResultDepthAltitudeReferencePointText SubjectTaxonomicName
+## 1                                  &lt;NA&gt;                 &lt;NA&gt;
+## 2                                  &lt;NA&gt;                 &lt;NA&gt;
+## 3                                  &lt;NA&gt;                 &lt;NA&gt;
+## 4                                  &lt;NA&gt;                 &lt;NA&gt;
+## 5                                  &lt;NA&gt;                 &lt;NA&gt;
+## 6                                  &lt;NA&gt;                 &lt;NA&gt;
+##   SampleTissueAnatomyName ResultAnalyticalMethod.MethodIdentifier
+## 1                    &lt;NA&gt;                                    &lt;NA&gt;
+## 2                    &lt;NA&gt;                                    &lt;NA&gt;
+## 3                    &lt;NA&gt;                                    &lt;NA&gt;
+## 4                    &lt;NA&gt;                                    &lt;NA&gt;
+## 5                    &lt;NA&gt;                                    &lt;NA&gt;
+## 6                    &lt;NA&gt;                                    &lt;NA&gt;
+##   ResultAnalyticalMethod.MethodIdentifierContext
+## 1                                           &lt;NA&gt;
+## 2                                           &lt;NA&gt;
+## 3                                           &lt;NA&gt;
+## 4                                           &lt;NA&gt;
+## 5                                           &lt;NA&gt;
+## 6                                           &lt;NA&gt;
+##   ResultAnalyticalMethod.MethodName MethodDescriptionText LaboratoryName
+## 1                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 2                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 3                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 4                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 5                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+## 6                              &lt;NA&gt;                  &lt;NA&gt;           &lt;NA&gt;
+##   AnalysisStartDate ResultLaboratoryCommentText
+## 1              &lt;NA&gt;                        &lt;NA&gt;
+## 2              &lt;NA&gt;                        &lt;NA&gt;
+## 3              &lt;NA&gt;                        &lt;NA&gt;
+## 4              &lt;NA&gt;                        &lt;NA&gt;
+## 5              &lt;NA&gt;                        &lt;NA&gt;
+## 6              &lt;NA&gt;                        &lt;NA&gt;
+##   DetectionQuantitationLimitTypeName
+## 1                               &lt;NA&gt;
+## 2                               &lt;NA&gt;
+## 3                               &lt;NA&gt;
+## 4                               &lt;NA&gt;
+## 5                               &lt;NA&gt;
+## 6                               &lt;NA&gt;
+##   DetectionQuantitationLimitMeasure.MeasureValue
+## 1                                             NA
+## 2                                             NA
+## 3                                             NA
+## 4                                             NA
+## 5                                             NA
+## 6                                             NA
+##   DetectionQuantitationLimitMeasure.MeasureUnitCode PreparationStartDate
+## 1                                              &lt;NA&gt;                 &lt;NA&gt;
+## 2                                              &lt;NA&gt;                 &lt;NA&gt;
+## 3                                              &lt;NA&gt;                 &lt;NA&gt;
+## 4                                              &lt;NA&gt;                 &lt;NA&gt;
+## 5                                              &lt;NA&gt;                 &lt;NA&gt;
+## 6                                              &lt;NA&gt;                 &lt;NA&gt;
+##   ProviderName timeZoneStart timeZoneEnd ActivityStartDateTime
+## 1         &lt;NA&gt;            NA          NA                  &lt;NA&gt;
+## 2         &lt;NA&gt;            NA          NA                  &lt;NA&gt;
+## 3         NWIS             5          NA   2007-01-03 16:40:00
+## 4         &lt;NA&gt;            NA          NA                  &lt;NA&gt;
+## 5         &lt;NA&gt;            NA          NA                  &lt;NA&gt;
+## 6         &lt;NA&gt;            NA          NA                  &lt;NA&gt;
+##   ActivityEndDateTime
+## 1                &lt;NA&gt;
+## 2                &lt;NA&gt;
+## 3                &lt;NA&gt;
+## 4                &lt;NA&gt;
+## 5                &lt;NA&gt;
+## 6                &lt;NA&gt;</code></pre>
+</div>
+<div class="section level2">
+<h2>Problem 4</h2>
+<p>Create a line plot of Date (x) and Flow (y). Create a scatter plot of
+Date (x) and chloride concentration (y). Put the graphs on top of each
+other using the patchwork library.</p>
+<pre class="r"><code>#To create a line plot
+line_plot&lt;- ggplot(newphys_joining, aes(x= Date, y=Flow))+
+  geom_line()+
+  ylab(&quot;Flow&quot;)+
+  xlab(element_blank())+
+  labs(title=&quot;Flow over Time at New River&quot;)+
+  theme_classic()
+
+#To create a scatterplot
+scatter_plot&lt;-ggplot(newphys_joining, aes(x=Date, y=ResultMeasureValue))+
+  geom_point()+
+  ylab(&quot;concentration(mg/L)&quot;)+
+  xlab(element_blank())+
+  labs(title = &quot;Chloride Concentration over Time at New River&quot;)+
+  theme_classic()
+
+
+combined_plot &lt;- line_plot/scatter_plot
+combined_plot</code></pre>
+<pre><code>## Warning: Removed 1085 rows containing missing values (`geom_point()`).</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+<div class="section level2">
+<h2>Problem 5</h2>
+<p>Create a scatter plot of Specific Conductivity (y) and Chloride (x).
+Challenge: what could you do to get rid of the warning this plot
+generates about NAs.</p>
+<pre class="r"><code>library(dplyr)
+newphys_clean &lt;- newphys_joining |&gt;
+  filter(! is.na(SpecCond) &amp; ! is.na(ResultMeasureValue))
+
+scatter_plot&lt;-ggplot(newphys_clean, aes(x= ResultMeasureValue, y=SpecCond))+
+  geom_point()+
+  ylab(&quot;Specific Cond. (&#181;s/cm)&quot;)+
+  xlab(&quot;Concentration (mg/L)&quot;)+
+  labs(title = &quot;Scatter Plot: Chloride Concentration over Time at New River&quot;)+
+  theme_classic()
+scatter_plot</code></pre>
+<p><img src="javascript://" width="672"/></p>
+<pre class="r"><code>#To address the warning about NAs: The warning likely indicates that there are missing values (NAs) in either the Specific Conductivity or Chloride columns. We can handle NAs by removing them with  na.omit  command which is used to remove rows containing NAs in the specified columns.</code></pre>
+</div>
+<div class="section level2">
+<h2>Problem 6</h2>
+<p>Read in the GG chem subset data and plot Mg_E1 (x) vs Ca_E1 (y) as
+points.</p>
+<pre class="r"><code>options(readr.show_col_types = FALSE)
+library(readr)
+gg_chem &lt;- read_csv(&quot;GG_chem_subest.csv&quot;)
+
+chem_plot &lt;- ggplot(gg_chem, aes(x = Mg_E1, y = Ca_E1))+
+  geom_point()+
+  ylab(&quot;Calcium(Ca)&quot;)+
+  xlab(&quot;Magnesium(Mg)&quot;)+
+  labs(title = &quot;Magnesium versus Calcium&quot;)+
+  theme(plot.title = element_text(hjust=0.5))
+  
+chem_plot</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+<div class="section level2">
+<h2>Problem 7</h2>
+<p>We want to look at concentrations of each element in the #6 dataset
+along the stream (Distance), which is difficult in the current format.
+Pivot the data into a long format, the data from Ca, Mg, and Na _E1
+columns should be pivoted. Make line plots of each element where y is
+the concentration and x is distance. Use facet_wrap() to create a
+separate plot for each element and use the “scales” argument of
+facet_wrap to allow each plot to have different y limits.</p>
+<pre class="r"><code>#To pivot the data
+gg_chem_long &lt;- gg_chem |&gt;
+  pivot_longer(cols = c(&quot;Ca_E1&quot;, &quot;Mg_E1&quot;,  &quot;Na_E1&quot;), 
+               names_to = &quot;Element&quot;, values_to = &quot;Concentration&quot;)
+
+#To Create line plots
+chem_plot &lt;- ggplot(gg_chem_long, aes(x= Distance, y = Concentration, group = Element, color= Element))+
+  geom_line()+
+  facet_wrap(facets = &quot;Element&quot;, nrow = 3, scales = &quot;free_y&quot;)+
+  theme_minimal()
+
+chem_plot</code></pre>
+<p><img src="javascript://" width="672"/></p>
+</div>
+</div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="module" src="https://s.brightspace.com/lib/bsi/20.24.1-233/unbundled/mathjax.js"></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() {
+					if (document.querySelector('math') || /\$\$|\\\(|\\\[|\\begin{|\\ref{|\\eqref{/.test(document.body.innerHTML)) {
+						document.querySelectorAll('mspace[linebreak="newline"]').forEach(elm => {
+							elm.setAttribute('style', 'display: block; height: 0.5rem;');
+						});
+
+						window.D2L.MathJax.loadMathJax({
+							'outputScale': 1.5,
+							'renderLatex': false
+						});
+					}
+				});</script><script type="module" src="https://s.brightspace.com/lib/bsi/20.24.1-233/unbundled/prism.js"></script><script type="text/javascript">document.addEventListener('DOMContentLoaded', function() {
+					document.querySelectorAll('.d2l-code').forEach(code => {
+						window.D2L.Prism.formatCodeElement(code);
+					});
+				});</script></body></html>
